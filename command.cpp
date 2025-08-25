@@ -5,24 +5,20 @@
 #include "volterra.hpp"
 using namespace lv;
 void command::get_step_parameters() {
-  double range = 0.001;
-
-  do {
+  const double range = 0.001;
+  double ratio;
     std::cout << "inserire il numero di step\n";
     std::cin >> nsteps;
-    if (nsteps <= 0) {
-      std::cout << "inserire un valore maggiore di zero\n";
-    }
-  } while (nsteps <= 0);
-  do {
+    if (std::cin.fail() ||nsteps <= 0) {
+      std::cout << "Numero di step non valido\n";
+      throw std::runtime_error("Numero di step non valido");}
     std::cout << "inserire la durata (dt) di ciascun step\n";
     std::cin >> dt;
-    double rat = dt / range;
-    if (rat < 1.0 || rat > 9.0) {
-      std::cout << "inserire un numero dell ordine di 0.001\n";
-    }
-  } while (dt / range < 1.0 || dt / range > 9.0);
-}
+    ratio = dt / range;
+    if (ratio < 1.0 || ratio > 9.0) {
+          throw std::runtime_error("inserire un numero dell ordine di 0.001\n");
+    }}
+
 
 void command::run_command() {
   bool run_condition = true;
@@ -34,9 +30,6 @@ void command::run_command() {
               << std::endl
               << "'p' per stampare la densità del numero di prede e predatori "
                  "e valore dell'integrale primo ad un dato step"
-              << std::endl
-              << "'f' per stampare la densità del numero di prede e predatori "
-                 "e valore dell'integrale primo"
               << std::endl
               << "'a' per stampare la densità del numero di prede e predatori "
                  "e valore dell'integrale primo ad ogni step"
@@ -52,24 +45,17 @@ void command::run_command() {
         get_step_parameters();
         sim.e_evolve(dt, nsteps);
       } else if (cmd_usr == 'f') {
-        const std::vector<Point>& result = sim.evolution_vector();
+        Point f_state = sim.a_p_get_step_result((sim.evolution_vector().size()-1));
         std::cout << "il risultato della simulazione è\n";
-        std::cout << result.back().x << "prede in vita\n";
-        std::cout << result.back().y << "predatori in vita\n";
-        std::cout<< "l'integrale primo del moto vale "<<result.back().H<<std::endl;
+        std::cout << f_state.x << "prede in vita\n";
+        std::cout << f_state.y << "predatori in vita\n";
+        std::cout<< "l'integrale primo del moto vale "<<f_state.H<<std::endl;
       } else if (cmd_usr == 'p') {
         int ncheck;
-        do {
           std::cout
-              << "inserire lo step del quale si vuole vedere lo stato della "
+       << "inserire lo step del quale si vuole vedere lo stato della "
                  "simulazione\n";
-          std::cin >> ncheck;
-          if (ncheck < 0 ||
-              static_cast<size_t>(ncheck) > sim.evolution_vector().size()) {
-            std::cout << "inserire un numero di step valido\n";
-          }
-        } while (ncheck < 0 ||
-                 static_cast<size_t>(ncheck) > sim.evolution_vector().size());
+         std::cin >> ncheck;
         Point state = sim.a_p_get_step_result(ncheck);
         std::cout << "al " << ncheck
                   << "-esimo step, il sistema si trovava nello stato\n";
@@ -87,7 +73,7 @@ void command::run_command() {
                     << " predatori" << " " << "H= "<<state.H<<std::endl;
         }
       } else {
-        std::cout << "Inserire comando valido\n";
+         throw std::runtime_error("Comando inesistente");
       }
   }
 }
