@@ -8,8 +8,7 @@ namespace lv {
 struct Point {
   double x;
   double y;
-  double H;
-  Point() = default;                             // costruttore di default
+  double H;                             // costruttore di default
 //  Point(double x_, double y_) : x(x_), y(y_){};
   Point(double x_, double y_, double H_=0.0) : x(x_), y(y_), H(H_){}// costruttore parametrizzato
 };
@@ -26,18 +25,18 @@ class Simulation {
   Constants parameters;
   std::vector<Point> ev_vector_;
   Point give_relative_point(const Point& p);
-  Point calc_point(double x_prev, double y_prev,double H, double dt);
+  Point calc_next_point(const Point& prev_point, double dt);
+  double calculate_H(double x, double y);
 
  public:
   Simulation(const Point& p_i, const Constants& c);
-  size_t size() const;
 
   // costruttore che inserisce in evvector il p iniziale inseriti da utente
   // inizializza i parametri
   const std::vector<Point>& evolution_vector() const { return ev_vector_; }
   void e_evolve(double dt, int nsteps);
 
-  const Point& a_p_get_step_result(int n);
+  Point a_p_get_step_result(int n);
 };
 }  // namespace lv
 #endif
