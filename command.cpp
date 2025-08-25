@@ -56,6 +56,7 @@ void command::run_command() {
         std::cout << "il risultato della simulazione è\n";
         std::cout << result.back().x << "prede in vita\n";
         std::cout << result.back().y << "predatori in vita\n";
+        std::cout<< "l'integrale primo del moto vale "<<result.back().H<<std::endl;
       } else if (cmd_usr == 'p') {
         int ncheck;
         do {
@@ -74,6 +75,7 @@ void command::run_command() {
                   << "-esimo step, il sistema si trovava nello stato\n";
         std::cout << state.x << " prede in vita\n";
         std::cout << state.y << " predatori in vita\n";
+        std::cout << state.H << " valore integrale primo\n";
       } else if (cmd_usr == 'c') {
         get_step_parameters();
         sim.e_evolve(dt, nsteps);
@@ -82,7 +84,7 @@ void command::run_command() {
              i++) {
           Point state = sim.a_p_get_step_result(i);
           std::cout << "step " << i << " " << state.x << " prede " << state.y
-                    << " predatori" << std::endl;
+                    << " predatori" << " " << "H= "<<state.H<<std::endl;
         }
       } else {
         std::cout << "Inserire comando valido\n";
