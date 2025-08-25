@@ -45,7 +45,7 @@ class Simulation {
     res.y = ev_vector_[n].y * (parameters.a / parameters.b);
     return res;
   }
-  void initialize(Simulation& sim) {}
+
 };
 }  // namespace lv
 #endif
