@@ -5,11 +5,16 @@
 #include "volterra.hpp"
 
 int main() {
-  std::cout << "inserire il valore dei parametri a b c d\n";
-  auto params = lv::initialize_const();
-  std::cout << "inserire il valore dei dati iniziali\n";
-  auto point_i = lv::initialize_point();
+        try {
+  lv::Constants params = lv::initialize_const();
+  lv::Point point_i = lv::initialize_point();
   lv::Simulation prova1(point_i, params);
   lv::command prova1_run(prova1);
   prova1_run.run_command();
+        }catch (const std::runtime_error& e){
+             std::cerr <<e.what() << ". Uscita dal programma.\n";
+       return 1;
+       
+            }
+            return 0;
 }
