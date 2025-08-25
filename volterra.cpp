@@ -53,6 +53,7 @@ void Simulation::e_evolve(double dt, int nsteps) {
         res;  // static fa persistere un oggetto oltre il suo normale scope
     res.x = ev_vector_[n].x * (parameters.d / parameters.c);
     res.y = ev_vector_[n].y * (parameters.a / parameters.b);
+      res.H =-parameters.d*std::log(ev_vector_[n].x)+parameters.c*ev_vector_[n].x+parameters.b*ev_vector_[n].y-parameters.a*std::log(ev_vector_[n].y);
     return res;
   }
 }  // namespace lv
